@@ -401,6 +401,21 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--cloth_texture', type=str, default=None, help='Path to custom texture image for the cloth top layer')
     args = parser.parse_args()
+
+    # --- Tkinter GUI for image selection ---
+    if args.cloth_texture is None:
+        try:
+            import tkinter as tk
+            from tkinter import filedialog
+            root = tk.Tk()
+            root.withdraw()
+            filetypes = [('Image Files', '*.png;*.jpg;*.jpeg;*.bmp;*.tiff;*.gif'), ('All Files', '*.*')]
+            selected_file = filedialog.askopenfilename(title='Select Cloth Texture Image', filetypes=filetypes)
+            if selected_file:
+                args.cloth_texture = selected_file
+            root.destroy()
+        except Exception as e:
+            print(f"Tkinter GUI not available: {e}")
     # If no argument is given, use a default image in the project folder if it exists
     if args.cloth_texture is None:
         default_img = os.path.join(os.path.dirname(__file__), 'cloth_texture.jpg')
